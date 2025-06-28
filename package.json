@@ -1,13 +1,17 @@
 {
   "name": "harukit",
   "version": "0.0.2",
+  "description": "A modern UI component library built with React, TypeScript, and Tailwind CSS",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist"
   ],
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "react": "^18 || ^19",
@@ -16,11 +20,19 @@
   "resolutions": {
     "undici-types": "latest"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "typescript",
+    "tailwind",
+    "ui",
+    "components",
+    "design-system"
+  ],
+  "author": "Your Name",
   "license": "ISC",
   "dependencies": {
     "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-tooltip": "^1.0.7",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "tailwind-merge": "^3.3.1"
