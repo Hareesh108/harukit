@@ -1,301 +1,204 @@
-# Harukit
+# Harukit - Modern React UI Component Library
 
-A modern, accessible, and customizable UI component library built with React, TypeScript, and Tailwind CSS. Designed to be a better alternative to shadcn/ui with enhanced features and flexibility.
+A modern, accessible, and customizable UI component library built with React, TypeScript, and Tailwind CSS. This monorepo contains the core library, CLI tool, documentation site, and demo applications.
 
-## ✨ Features
+## 🚀 Features
 
-- 🎨 **Advanced Theming System** - Dynamic theme switching with CSS custom properties
-- 🧩 **Comprehensive Components** - 20+ production-ready components
-- 🎯 **TypeScript First** - Full type safety with excellent DX
-- 🎨 **Multiple Variants** - Rich component variants and customization options
-- 🌙 **Dark Mode Support** - Built-in dark mode with system preference detection
-- 📱 **Responsive Design** - Mobile-first responsive components
-- ♿ **Accessible** - WCAG compliant with ARIA support
-- 🚀 **Tree Shakeable** - Optimized bundle sizes
-- 🔧 **Customizable** - Easy to customize and extend
-- 📦 **NPM Package** - Install as a traditional library (unlike shadcn/ui)
+- **TypeScript First**: Built with TypeScript for better developer experience
+- **Accessible**: All components follow WCAG guidelines
+- **Customizable**: Easy to customize with CSS custom properties and Tailwind CSS
+- **Modern**: Built with the latest React patterns and best practices
+- **CLI Tool**: Powerful CLI for component management
+- **Documentation**: Comprehensive documentation with examples
+- **Monorepo**: Organized structure for scalable development
 
-## 🚀 Quick Start
+## 📦 Packages
 
-### Installation
+This monorepo contains the following packages:
 
-```bash
-npm install harukit
-```
+- **`@harukit/ui`** - Core UI component library
+- **`@harukit/cli`** - CLI tool for component management
+- **`@harukit/registry`** - Component registry and metadata
+- **`@harukit/www`** - Documentation site
+- **`@harukit/demo`** - Demo application
+- **`@harukit/eslint-config`** - Shared ESLint configuration
+- **`@harukit/prettier-config`** - Shared Prettier configuration
 
-### Basic Usage
+## 🛠️ Development
 
-```tsx
-import { Button, Card, Input, Tooltip } from 'harukit';
+### Prerequisites
 
-function App() {
-  return (
-    <div className="p-4">
-      <Card>
-        <Card.Header>
-          <Card.Title>Welcome to Harukit</Card.Title>
-          <Card.Description>
-            A modern UI component library
-          </Card.Description>
-        </Card.Header>
-        <Card.Content>
-          <Input 
-            label="Email" 
-            placeholder="Enter your email"
-            leftIcon={<MailIcon />}
-          />
-        </Card.Content>
-        <Card.Footer>
-          <Tooltip content="Click to submit">
-            <Button>Submit</Button>
-          </Tooltip>
-        </Card.Footer>
-      </Card>
-    </div>
-  );
-}
-```
+- Node.js 18+
+- pnpm 8+
 
-## 🎨 Theming
+### Setup
 
-Harukit comes with a powerful theming system that's better than shadcn/ui:
-
-```tsx
-import { themeManager } from 'harukit';
-
-// Switch themes dynamically
-themeManager.updateConfig({
-  mode: 'dark',
-  primaryColor: '600',
-  borderRadius: 'lg',
-  fontFamily: 'mono'
-});
-```
-
-### CSS Custom Properties
-
-```css
-:root {
-  --harukit-primary: #3b82f6;
-  --harukit-background: #ffffff;
-  --harukit-foreground: #171717;
-  --harukit-radius: 0.375rem;
-}
-
-[data-theme="dark"] {
-  --harukit-background: #0a0a0a;
-  --harukit-foreground: #fafafa;
-}
-```
-
-## 📦 Components
-
-### Core Components
-
-- **Button** - Multiple variants, sizes, loading states, icons
-- **Input** - Validation states, icons, helper text
-- **Card** - Flexible layout with header, content, footer
-- **Label** - Accessible form labels
-- **Tooltip** - Advanced positioning and animations
-
-### Component Features
-
-Each component includes:
-
-- Multiple variants (default, destructive, outline, etc.)
-- Different sizes (sm, md, lg, xl)
-- Loading states where applicable
-- Icon support
-- Full TypeScript types
-- Accessibility features
-
-## 🛠️ CLI Tool
-
-Harukit includes a powerful CLI tool for component management:
-
-```bash
-# Install CLI globally
-npm install -g @harukit/cli
-
-# Initialize in your project
-harukit init
-
-# Add components
-harukit add button card input
-
-# List available components
-harukit list
-```
-
-## 🎯 Why Harukit over shadcn/ui?
-
-| Feature | shadcn/ui | Harukit |
-|---------|-----------|---------|
-| Installation | Copy-paste components | Traditional NPM package |
-| Theming | Limited customization | Advanced theme system |
-| Bundle Size | No tree-shaking | Optimized tree-shaking |
-| TypeScript | Good | Excellent with full types |
-| Dark Mode | Basic | Advanced with system detection |
-| CLI Tool | Basic | Comprehensive with registry |
-| Customization | Manual | Built-in theme manager |
-| Performance | Good | Optimized with caching |
-
-## 🔧 Configuration
-
-### Tailwind CSS Setup
-
-```js
-// tailwind.config.js
-module.exports = {
-  content: [
-    './src/**/*.{js,ts,jsx,tsx}',
-    './node_modules/harukit/dist/**/*.js'
-  ],
-  theme: {
-    extend: {
-      colors: {
-        border: "hsl(var(--harukit-border))",
-        input: "hsl(var(--harukit-input))",
-        ring: "hsl(var(--harukit-ring))",
-        background: "hsl(var(--harukit-background))",
-        foreground: "hsl(var(--harukit-foreground))",
-        primary: {
-          DEFAULT: "hsl(var(--harukit-primary))",
-          foreground: "hsl(var(--harukit-primary-foreground))",
-        },
-        // ... more colors
-      }
-    }
-  }
-}
-```
-
-### CSS Setup
-
-```css
-/* globals.css */
-@import 'harukit/styles/theme.css';
-
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
-
-## 📚 Examples
-
-### Button Variants
-
-```tsx
-<Button variant="default">Default</Button>
-<Button variant="destructive">Delete</Button>
-<Button variant="outline">Outline</Button>
-<Button variant="secondary">Secondary</Button>
-<Button variant="ghost">Ghost</Button>
-<Button variant="link">Link</Button>
-```
-
-### Button with Loading State
-
-```tsx
-<Button loading leftIcon={<PlusIcon />}>
-  Add Item
-</Button>
-```
-
-### Card with Different Variants
-
-```tsx
-<Card variant="default" padding="lg">
-  <CardHeader>
-    <CardTitle>Default Card</CardTitle>
-  </CardHeader>
-</Card>
-
-<Card variant="elevated" hover interactive>
-  <CardContent>Interactive Card</CardContent>
-</Card>
-```
-
-### Input with Validation
-
-```tsx
-<Input
-  label="Email"
-  placeholder="Enter your email"
-  leftIcon={<MailIcon />}
-  error={hasError}
-  errorText="Please enter a valid email"
-/>
-```
-
-### Tooltip with Custom Animation
-
-```tsx
-<Tooltip
-  content="This is a tooltip"
-  variant="colored"
-  animation="scale"
-  side="top"
->
-  <Button>Hover me</Button>
-</Tooltip>
-```
-
-## 🎨 Design Tokens
-
-Harukit provides a comprehensive design system:
-
-```tsx
-import { colors, spacing, typography, shadows } from 'harukit';
-
-// Use design tokens in your components
-const styles = {
-  backgroundColor: colors.primary[500],
-  padding: spacing[4],
-  fontSize: typography.fontSize.lg[0],
-  boxShadow: shadows.md,
-};
-```
-
-## 🔄 Migration from shadcn/ui
-
-1. Install Harukit:
+1. **Clone the repository**
 
    ```bash
-   npm install harukit
+   git clone https://github.com/your-username/harukit.git
+   cd harukit
    ```
 
-2. Replace imports:
+2. **Install dependencies**
 
-   ```tsx
-   // Before (shadcn/ui)
-   import { Button } from "@/components/ui/button"
-   
-   // After (Harukit)
-   import { Button } from "harukit"
+   ```bash
+   pnpm install
    ```
 
-3. Update theme configuration (optional)
+3. **Build all packages**
 
-## 📖 Documentation
+   ```bash
+   pnpm build
+   ```
 
-- [Component API Reference](./docs/components.md)
-- [Theming Guide](./docs/theming.md)
-- [CLI Documentation](./docs/cli.md)
-- [Migration Guide](./docs/migration.md)
+### Development Commands
+
+```bash
+# Start development servers
+pnpm dev
+
+# Build all packages
+pnpm build
+
+# Type check all packages
+pnpm type-check
+
+# Lint all packages
+pnpm lint
+
+# Format code
+pnpm format
+
+# Clean build artifacts
+pnpm clean
+
+# Run tests (when implemented)
+pnpm test
+```
+
+### Working with Components
+
+```bash
+# Add a new component
+pnpm --filter @harukit/cli add button
+
+# Remove a component
+pnpm --filter @harukit/cli remove button
+
+# List all components
+pnpm --filter @harukit/cli list
+
+# Update components
+pnpm --filter @harukit/cli update
+```
+
+## 📚 Documentation
+
+The documentation site is built with Next.js and Contentlayer. To run it locally:
+
+```bash
+# Start the documentation site
+pnpm --filter @harukit/www dev
+```
+
+Visit [http://localhost:3000](http://localhost:3000) to view the documentation.
+
+## 🚀 Deployment
+
+### Publishing to npm
+
+1. **Create a changeset**
+
+   ```bash
+   pnpm changeset
+   ```
+
+2. **Version packages**
+
+   ```bash
+   pnpm version-packages
+   ```
+
+3. **Publish to npm**
+
+   ```bash
+   pnpm release
+   ```
+
+### Deploying Documentation
+
+The documentation site is automatically deployed to Vercel on every push to the main branch.
+
+To deploy manually:
+
+```bash
+# Build the documentation site
+pnpm build:docs
+
+# Deploy to Vercel
+pnpm deploy:docs
+```
+
+## 🏗️ Project Structure
+
+```
+harukit/
+├── apps/
+│   ├── www/                 # Documentation site
+│   └── demo/                # Demo application
+├── packages/
+│   ├── ui/                  # Core UI library
+│   ├── cli/                 # CLI tool
+│   ├── registry/            # Component registry
+│   └── config/              # Shared configurations
+│       ├── eslint/          # ESLint configuration
+│       └── prettier/        # Prettier configuration
+├── .github/
+│   └── workflows/           # CI/CD workflows
+├── .changeset/              # Changesets configuration
+├── turbo.json               # Turbo configuration
+├── pnpm-workspace.yaml      # pnpm workspace configuration
+└── package.json             # Root package.json
+```
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guide](./CONTRIBUTING.md) for details.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+### Development Guidelines
+
+- Follow the existing code style and conventions
+- Add TypeScript types for all new components
+- Ensure components are accessible
+- Add tests for new functionality
+- Update documentation for new features
+- Use conventional commits for commit messages
 
 ## 📄 License
 
-MIT License - see [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 🙏 Acknowledgments
 
-- [Radix UI](https://radix-ui.com/) for accessible primitives
-- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Radix UI](https://www.radix-ui.com/) for accessible primitives
+- [Tailwind CSS](https://tailwindcss.com/) for utility-first CSS
 - [shadcn/ui](https://ui.shadcn.com/) for inspiration
+- [Vercel](https://vercel.com/) for hosting and deployment
+
+## 📞 Support
+
+- 📧 Email: <support@harukit.dev>
+- 🐛 Issues: [GitHub Issues](https://github.com/your-username/harukit/issues)
+- 💬 Discussions: [GitHub Discussions](https://github.com/your-username/harukit/discussions)
+- 📖 Documentation: [https://harukit.dev](https://harukit.dev)
+
+---
+
+Made with ❤️ by the Harukit Team
 
 ```
