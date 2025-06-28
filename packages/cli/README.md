@@ -27,7 +27,7 @@ A modern CLI tool for adding beautiful, accessible UI components to your React p
 - ♿ **Accessible**: Built on top of Radix UI primitives
 - 🎯 **TypeScript**: Full TypeScript support out of the box
 - 🎨 **Tailwind CSS**: Styled with Tailwind CSS and CSS variables
-- 📦 **Multiple Package Managers**: Support for npm, yarn, and pnpm
+- 📦 **Multiple Package Managers**: Support for npm, yarn, pnpm, and bun (auto-detected)
 
 ## Quick Start
 
@@ -38,10 +38,13 @@ A modern CLI tool for adding beautiful, accessible UI components to your React p
 npx harukit@latest init
 
 # Using pnpm
-pnpm dlx harukit@latest init
+dlx harukit@latest init
 
 # Using yarn
 yarn dlx harukit@latest init
+
+# Using bun
+bunx harukit@latest init
 ```
 
 This will:
@@ -50,31 +53,10 @@ This will:
 - Set up the necessary directories (`components/`, `lib/`)
 - Create the `utils.ts` file with the `cn` function
 - Add global CSS with Tailwind variables
-- Show you the dependencies to install
+- **Automatically install all required dependencies** using your detected package manager (npm, yarn, pnpm, or bun)
+- Show progress for each dependency as it installs
 
-### 2. Install Dependencies
-
-After initialization, you'll see a command to install dependencies. Run it based on your package manager:
-
-**npm:**
-
-```bash
-npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-```
-
-**pnpm:**
-
-```bash
-pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-```
-
-**yarn:**
-
-```bash
-yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-```
-
-### 3. Add Components
+### 2. Add Components
 
 ```bash
 # Add a single component
@@ -104,30 +86,18 @@ cd my-app
 npx harukit@latest init    # npm
 pnpm dlx harukit@latest init  # pnpm
 yarn dlx harukit@latest init  # yarn
+bunx harukit@latest init      # bun
 ```
 
-### Step 3: Install dependencies
+> **Note:** Harukit will automatically detect your package manager (npm, yarn, pnpm, or bun) and install all required dependencies for you. You do not need to run a separate install command.
 
-Copy and run the command shown after initialization:
-
-```bash
-# npm
-npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-
-# pnpm
-pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-
-# yarn
-yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
-```
-
-### Step 4: Add your first component
+### Step 3: Add your first component
 
 ```bash
 npx harukit@latest add button
 ```
 
-### Step 5: Use the component
+### Step 4: Use the component
 
 ```tsx
 import { Button } from "@/components/button"
@@ -183,6 +153,8 @@ npx harukit@latest init --yes
 # Custom configuration
 npx harukit@latest init --typescript --tailwind --src-dir
 ```
+
+> **Note:** All required dependencies are installed automatically using your detected package manager (npm, yarn, pnpm, or bun). You do not need to run a separate install command.
 
 ### `add`
 
@@ -400,6 +372,19 @@ yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radi
 
 # Add components
 yarn dlx harukit@latest add button card
+```
+
+### bun
+
+```bash
+# Initialize
+bunx harukit@latest init
+
+# Install dependencies
+bun add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# Add components
+bunx harukit@latest add button card
 ```
 
 ## Tailwind Configuration

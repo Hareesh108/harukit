@@ -13,7 +13,21 @@ export class PackageManager {
   async init(): Promise<void> {
     const detector = new ProjectDetector(this.root);
     const projectInfo = await detector.detect();
-    this.manager = projectInfo.packageManager;
+    if (await this.hasBun()) {
+      this.manager = 'bun';
+    } else {
+      this.manager = projectInfo.packageManager;
+    }
+  }
+
+  async hasBun(): Promise<boolean> {
+    try {
+      const bunLock = require('fs').existsSync(require('path').join(this.root, 'bun.lockb'));
+      const bunBinary = require('child_process').spawnSync('bun', ['--version'], { stdio: 'ignore' }).status === 0;
+      return bunLock || bunBinary;
+    } catch {
+      return false;
+    }
   }
 
   async install(packages: string[], isDev = false): Promise<void> {
@@ -108,6 +122,8 @@ export class PackageManager {
         return ['add', ...packages, ...(isDev ? ['--dev'] : [])];
       case 'pnpm':
         return ['add', ...packages, ...(isDev ? ['--save-dev'] : [])];
+      case 'bun':
+        return ['add', ...packages, ...(isDev ? ['--dev'] : [])];
       default:
         return ['install', ...packages, ...(isDev ? ['--save-dev'] : [])];
     }
@@ -121,6 +137,8 @@ export class PackageManager {
         return ['add', packageName, ...(isDev ? ['--dev'] : [])];
       case 'pnpm':
         return ['add', packageName, ...(isDev ? ['--save-dev'] : [])];
+      case 'bun':
+        return ['add', packageName, ...(isDev ? ['--dev'] : [])];
       default:
         return ['install', packageName, ...(isDev ? ['--save-dev'] : [])];
     }
@@ -133,6 +151,8 @@ export class PackageManager {
       case 'yarn':
         return ['remove', packageName];
       case 'pnpm':
+        return ['remove', packageName];
+      case 'bun':
         return ['remove', packageName];
       default:
         return ['uninstall', packageName];

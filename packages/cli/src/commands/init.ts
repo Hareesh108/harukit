@@ -7,6 +7,7 @@ import ora from 'ora';
 import { ProjectDetector } from '../utils/project-detector';
 import { ConfigManager } from '../config/manager';
 import { getTemplatePath } from '../utils/template-resolver';
+import { PackageManager } from '../utils/package-manager';
 
 const initSchema = z.object({
   yes: z.boolean().optional(),
@@ -18,13 +19,11 @@ const initSchema = z.object({
 });
 
 export async function init(options: any) {
-  const spinner = ora('Initializing Harukit...').start();
-
   try {
     // Check if configuration already exists
     const existingConfigPath = path.join(process.cwd(), 'harukit.json');
     if (await fs.pathExists(existingConfigPath)) {
-      spinner.fail('Harukit is already initialized in this project.');
+      console.log(chalk.red('Harukit is already initialized in this project.'));
       console.log(chalk.blue('\nConfiguration file found:'));
       console.log(chalk.green(`  ${existingConfigPath}`));
       console.log(chalk.blue('\nYou can:'));
@@ -41,7 +40,7 @@ export async function init(options: any) {
     const projectInfo = await detector.detect();
     
     if (!projectInfo.isValid) {
-      spinner.fail('Could not detect project type. Please run this command in a supported project.');
+      console.log(chalk.red('Could not detect project type. Please run this command in a supported project.'));
       process.exit(1);
     }
 
@@ -96,6 +95,38 @@ export async function init(options: any) {
       preferences = { ...preferences, ...opts };
     }
 
+    // Start spinner only after prompts are done
+    const spinner = ora('Initializing Harukit...').start();
+
+    // Install dependencies before writing config
+    const dependencies = [
+      'clsx',
+      'tailwind-merge',
+      'class-variance-authority',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-label',
+      '@radix-ui/react-tooltip',
+      'lucide-react',
+    ];
+    if (preferences.typescript) {
+      dependencies.push('@types/node');
+    }
+
+    spinner.text = 'Installing dependencies...';
+    const pm = new PackageManager(process.cwd());
+    try {
+      for (const dep of dependencies) {
+        console.log(chalk.cyan(`→ Installing ${dep}...`));
+        await pm.add(dep, false);
+      }
+      spinner.succeed('All dependencies installed!');
+    } catch (err) {
+      spinner.fail('Failed to install dependencies.');
+      console.error(err);
+      process.exit(1);
+    }
+
     // Create configuration
     const config = {
       $schema: 'https://harukit.com/schema.json',
@@ -118,11 +149,11 @@ export async function init(options: any) {
     // Write configuration file
     const configPath = path.join(process.cwd(), 'harukit.json');
     await fs.writeJson(configPath, config, { spaces: 2 });
+    spinner.succeed('Created harukit.json');
 
     // Create directories
     const componentsDir = path.join(process.cwd(), preferences.srcDir ? 'src' : '', 'components');
     const libDir = path.join(process.cwd(), preferences.srcDir ? 'src' : '', 'lib');
-    
     await fs.ensureDir(componentsDir);
     await fs.ensureDir(libDir);
 
@@ -139,43 +170,14 @@ export async function init(options: any) {
       await fs.copy(cssTemplate, cssDest);
     }
 
-    // Install dependencies
-    spinner.text = 'Installing dependencies...';
-    
-    const dependencies = [
-      'clsx',
-      'tailwind-merge',
-      'class-variance-authority',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-label',
-      '@radix-ui/react-tooltip',
-      'lucide-react',
-    ];
-
-    if (preferences.typescript) {
-      dependencies.push('@types/node');
-    }
-
-    const installCommand = projectInfo.packageManager === 'npm' 
-      ? `npm install ${dependencies.join(' ')}`
-      : projectInfo.packageManager === 'yarn'
-      ? `yarn add ${dependencies.join(' ')}`
-      : `pnpm add ${dependencies.join(' ')}`
-
-    // Note: We'll let the user run this manually for now
-    console.log(chalk.blue('\nPlease run the following command to install dependencies:'));
-    console.log(chalk.green(installCommand));
-
     spinner.succeed('Harukit initialized successfully!');
-    
     console.log(chalk.blue('\nNext steps:'));
-    console.log(chalk.green('1. Install dependencies (see command above)'));
+    console.log(chalk.green('1. Start building your UI!'));
     console.log(chalk.green('2. Add components with: npx harukit@latest add <component>'));
-    console.log(chalk.green('3. Start building your UI!'));
+    console.log(chalk.green('3. Check the documentation for usage examples'));
 
   } catch (error) {
-    spinner.fail('Failed to initialize Harukit');
+    console.log(chalk.red('Failed to initialize Harukit'));
     console.error(error);
     process.exit(1);
   }
