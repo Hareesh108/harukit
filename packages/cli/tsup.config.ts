@@ -1,4 +1,6 @@
 import { defineConfig } from 'tsup';
+import { copy } from 'fs-extra';
+import { join } from 'path';
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -24,4 +26,7 @@ export default defineConfig({
     'prettier',
     'typescript'
   ],
+  async onSuccess() {
+    await copy('templates', 'dist/templates');
+  },
 }); 

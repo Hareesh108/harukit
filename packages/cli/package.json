@@ -1,14 +1,13 @@
 {
     "name": "harukit",
-    "version": "0.1.3",
+    "version": "0.1.6",
     "description": "CLI tool for Harukit UI components",
     "main": "dist/index.js",
     "bin": {
         "harukit": "dist/index.js"
     },
     "files": [
-        "dist",
-        "templates"
+        "dist"
     ],
     "scripts": {
         "build": "tsup",

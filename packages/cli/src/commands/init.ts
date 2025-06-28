@@ -6,6 +6,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import { ProjectDetector } from '../utils/project-detector';
 import { ConfigManager } from '../config/manager';
+import { getTemplatePath } from '../utils/template-resolver';
 
 const initSchema = z.object({
   yes: z.boolean().optional(),
@@ -20,6 +21,21 @@ export async function init(options: any) {
   const spinner = ora('Initializing Harukit...').start();
 
   try {
+    // Check if configuration already exists
+    const existingConfigPath = path.join(process.cwd(), 'harukit.json');
+    if (await fs.pathExists(existingConfigPath)) {
+      spinner.fail('Harukit is already initialized in this project.');
+      console.log(chalk.blue('\nConfiguration file found:'));
+      console.log(chalk.green(`  ${existingConfigPath}`));
+      console.log(chalk.blue('\nYou can:'));
+      console.log(chalk.green('  • Add components with: npx harukit@latest add <component>'));
+      console.log(chalk.green('  • Remove components with: npx harukit@latest remove <component>'));
+      console.log(chalk.green('  • List available components with: npx harukit@latest list'));
+      console.log(chalk.green('  • Update components with: npx harukit@latest update'));
+      console.log(chalk.yellow('  • Delete harukit.json to reinitialize'));
+      process.exit(0);
+    }
+
     // Detect project type
     const detector = new ProjectDetector(process.cwd());
     const projectInfo = await detector.detect();
@@ -111,13 +127,13 @@ export async function init(options: any) {
     await fs.ensureDir(libDir);
 
     // Copy utils file
-    const utilsTemplate = path.join(__dirname, '../../templates/lib/utils.ts');
+    const utilsTemplate = getTemplatePath('lib/utils.ts');
     const utilsDest = path.join(libDir, 'utils.ts');
     await fs.copy(utilsTemplate, utilsDest);
 
     // Copy global CSS if Tailwind is enabled
     if (preferences.tailwind) {
-      const cssTemplate = path.join(__dirname, '../../templates/globals.css');
+      const cssTemplate = getTemplatePath('globals.css');
       const cssDest = path.join(process.cwd(), preferences.srcDir ? 'src' : '', 'app/globals.css');
       await fs.ensureDir(path.dirname(cssDest));
       await fs.copy(cssTemplate, cssDest);

@@ -3,6 +3,7 @@ import path from 'path'
 import chalk from 'chalk'
 import ora from 'ora'
 import { ConfigManager } from '../config/manager'
+import { getTemplatePath } from '../utils/template-resolver'
 
 export async function add(components: string[], options: any) {
   const spinner = ora('Adding components...').start()
@@ -58,7 +59,7 @@ export async function add(components: string[], options: any) {
 
     // Copy components
     for (const component of componentsToAdd) {
-      const templatePath = path.join(__dirname, '../../templates/components', `${component}.tsx`)
+      const templatePath = getTemplatePath(`components/${component}.tsx`)
       const destPath = path.join(componentsDir, `${component}.tsx`)
 
       if (await fs.pathExists(destPath) && !options.overwrite) {
@@ -71,7 +72,7 @@ export async function add(components: string[], options: any) {
     }
 
     // Ensure utils file exists
-    const utilsTemplate = path.join(__dirname, '../../templates/lib/utils.ts')
+    const utilsTemplate = getTemplatePath('lib/utils.ts')
     const utilsDest = path.join(libDir, 'utils.ts')
 
     if (!(await fs.pathExists(utilsDest))) {
