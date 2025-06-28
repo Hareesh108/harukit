@@ -9,21 +9,19 @@ export default defineConfig({
   clean: true,
   minify: false,
   banner: {
-    js: '#!/usr/bin/env node',
+    js: '#!/usr/bin/env node\n',
   },
+  noExternal: ['chalk', 'ora'],
   external: [
     'commander',
     'prompts',
     'zod',
-    'chalk',
-    'ora',
     'fs-extra',
     'glob',
     'node-fetch',
     'semver',
     'cosmiconfig',
     'prettier',
-    'typescript',
-    '@harukit/registry'
+    'typescript'
   ],
 }); 

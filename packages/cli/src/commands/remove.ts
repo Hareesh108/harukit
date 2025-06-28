@@ -1,81 +1,48 @@
-import chalk from 'chalk';
-import prompts from 'prompts';
-import { ConfigManager } from '../config/manager';
-import { ComponentInstaller } from '../utils/component-installer';
-import { PackageManager } from '../utils/package-manager';
+import fs from 'fs-extra'
+import path from 'path'
+import chalk from 'chalk'
+import ora from 'ora'
+import { ConfigManager } from '../config/manager'
 
-export async function remove(components: string[]): Promise<void> {
-  const cwd = process.cwd();
-  
-  console.log(chalk.blue('🗑️  Removing components...\n'));
+export async function remove(components: string[], options: any) {
+  const spinner = ora('Removing components...').start()
 
   try {
-    const configManager = new ConfigManager(cwd);
-    const config = await configManager.load();
-    const installer = new ComponentInstaller(cwd, configManager);
-    const packageManager = new PackageManager(cwd);
+    // Load configuration
+    const configManager = new ConfigManager(process.cwd())
+    const config = await configManager.load()
 
-    // If no components specified, show interactive selection
+    if (!config) {
+      spinner.fail('No Harukit configuration found. Run "npx harukit@latest init" first.')
+      process.exit(1)
+    }
+
     if (components.length === 0) {
-      if (config.components.length === 0) {
-        console.log(chalk.yellow('No components installed to remove.'));
-        return;
-      }
-
-      const response = await prompts({
-        type: 'autocompleteMultiselect',
-        name: 'selectedComponents',
-        message: 'Select components to remove:',
-        choices: config.components.map(comp => ({
-          title: comp,
-          value: comp,
-        })),
-        hint: 'Space to select, Enter to confirm',
-      });
-
-      if (!response.selectedComponents || response.selectedComponents.length === 0) {
-        console.log(chalk.yellow('No components selected for removal'));
-        return;
-      }
-
-      components = response.selectedComponents;
+      spinner.fail('Please specify components to remove. Example: npx harukit@latest remove button')
+      process.exit(1)
     }
 
-    // Confirm removal
-    const response = await prompts({
-      type: 'confirm',
-      name: 'confirm',
-      message: `Are you sure you want to remove ${components.length} component(s)?`,
-      initial: false,
-    });
+    // Get project structure
+    const hasSrcDir = await fs.pathExists(path.join(process.cwd(), 'src'))
+    const componentsDir = path.join(process.cwd(), hasSrcDir ? 'src' : '', 'components')
 
-    if (!response.confirm) {
-      console.log(chalk.yellow('Removal cancelled'));
-      return;
-    }
+    // Remove components
+    for (const component of components) {
+      const componentPath = path.join(componentsDir, `${component}.tsx`)
 
-    // Process each component
-    for (const componentName of components) {
-      console.log(chalk.blue(`\n🗑️  Removing ${componentName}...`));
-
-      try {
-        // Remove component files
-        await installer.removeComponent(componentName);
-
-        // Remove from config
-        await configManager.removeComponent(componentName);
-
-        console.log(chalk.green(`✅ ${componentName} removed successfully!`));
-
-      } catch (error) {
-        console.error(chalk.red(`❌ Failed to remove ${componentName}:`), error);
+      if (await fs.pathExists(componentPath)) {
+        await fs.remove(componentPath)
+        console.log(chalk.green(`✅ Removed ${component}.tsx`))
+      } else {
+        console.log(chalk.yellow(`⚠️  ${component}.tsx not found`))
       }
     }
 
-    console.log(chalk.green('\n🎉 Components removed successfully!'));
+    spinner.succeed('Components removed successfully!')
 
   } catch (error) {
-    console.error(chalk.red('❌ Failed to remove components:'), error);
-    process.exit(1);
+    spinner.fail('Failed to remove components')
+    console.error(error)
+    process.exit(1)
   }
 } 

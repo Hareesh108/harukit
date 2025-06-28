@@ -1,24 +1,69 @@
 import chalk from 'chalk';
+import ora from 'ora';
 import { ConfigManager } from '../config/manager';
 import { RegistryClient } from '../registry/client';
 
-export async function info(componentName?: string): Promise<void> {
-  const cwd = process.cwd();
-  
-  console.log(chalk.blue('ℹ️  Component Information\n'));
+export async function info(component: string, options: any) {
+  const spinner = ora('Getting information...').start();
 
   try {
-    const configManager = new ConfigManager(cwd);
+    // Load configuration
+    const configManager = new ConfigManager(process.cwd());
     const config = await configManager.load();
 
-    if (componentName) {
-      await showComponentInfo(componentName, config);
-    } else {
-      await showProjectInfo(config);
+    if (!config) {
+      spinner.fail('No Harukit configuration found. Run "npx harukit@latest init" first.');
+      process.exit(1);
     }
 
+    if (component) {
+      // Show specific component info
+      const availableComponents = [
+        { name: 'accordion', description: 'Collapsible content sections', category: 'Layout' },
+        { name: 'button', description: 'Versatile button with multiple variants', category: 'Form' },
+        { name: 'card', description: 'Container for content with header, content, and footer', category: 'Layout' },
+        { name: 'input', description: 'Form input field', category: 'Form' },
+        { name: 'label', description: 'Form label with accessibility features', category: 'Form' },
+        { name: 'tooltip', description: 'Hover tooltips', category: 'Feedback' },
+      ];
+
+      const componentInfo = availableComponents.find(c => c.name === component);
+      
+      if (componentInfo) {
+        console.log(chalk.blue(`\nComponent: ${componentInfo.name}`));
+        console.log(chalk.gray(`Category: ${componentInfo.category}`));
+        console.log(chalk.gray(`Description: ${componentInfo.description}`));
+        console.log();
+        console.log(chalk.blue('Usage:'));
+        console.log(chalk.green(`  npx harukit@latest add ${component}`));
+      } else {
+        console.log(chalk.red(`Component "${component}" not found`));
+        console.log(chalk.blue('Available components:'));
+        availableComponents.forEach(c => console.log(chalk.green(`  • ${c.name}`)));
+      }
+    } else {
+      // Show general info
+      console.log(chalk.blue('\nHarukit Information'));
+      console.log(chalk.gray('─'.repeat(50)));
+      console.log(chalk.green('Version: 0.1.0'));
+      console.log(chalk.green('Framework: React + TypeScript'));
+      console.log(chalk.green('Styling: Tailwind CSS'));
+      console.log(chalk.green('Primitives: Radix UI'));
+      console.log();
+      console.log(chalk.blue('Available Commands:'));
+      console.log(chalk.green('  init    - Initialize Harukit in your project'));
+      console.log(chalk.green('  add     - Add components to your project'));
+      console.log(chalk.green('  remove  - Remove components from your project'));
+      console.log(chalk.green('  list    - List available components'));
+      console.log(chalk.green('  update  - Check for updates'));
+      console.log(chalk.green('  info    - Show information'));
+    }
+
+    spinner.succeed('Information retrieved successfully!');
+
   } catch (error) {
-    console.error(chalk.red('❌ Failed to get information:'), error);
+    spinner.fail('Failed to get information');
+    console.error(error);
     process.exit(1);
   }
 }

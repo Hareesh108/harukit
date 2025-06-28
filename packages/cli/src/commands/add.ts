@@ -1,129 +1,94 @@
-import chalk from 'chalk';
-import prompts from 'prompts';
-import fs from 'fs-extra';
-import path from 'path';
-import { ConfigManager } from '../config/manager';
-import { RegistryClient } from '../registry/client';
-import { PackageManager } from '../utils/package-manager';
-import { ComponentInstaller } from '../utils/component-installer';
+import fs from 'fs-extra'
+import path from 'path'
+import chalk from 'chalk'
+import ora from 'ora'
+import { ConfigManager } from '../config/manager'
 
-interface AddOptions {
-  overwrite?: boolean;
-  path?: string;
-}
-
-export async function add(components: string[], options: AddOptions = {}): Promise<void> {
-  const cwd = process.cwd();
-  
-  console.log(chalk.blue('📦 Adding components...\n'));
+export async function add(components: string[], options: any) {
+  const spinner = ora('Adding components...').start()
 
   try {
     // Load configuration
-    const configManager = new ConfigManager(cwd);
-    const config = await configManager.load();
+    const configManager = new ConfigManager(process.cwd())
+    const config = await configManager.load()
 
-    // Initialize registry client
-    const registryClient = new RegistryClient({
-      url: config.registry.url,
-      cache: config.registry.cache,
-      ttl: config.registry.ttl,
-      timeout: 30000,
-    });
-    await registryClient.init();
-
-    // If no components specified, show interactive selection
-    if (components.length === 0) {
-      const availableComponents = await registryClient.getComponents();
-      
-      const response = await prompts({
-        type: 'autocompleteMultiselect',
-        name: 'selectedComponents',
-        message: 'Select components to add:',
-        choices: availableComponents.components.map(comp => ({
-          title: `${comp.name} - ${comp.description}`,
-          value: comp.name,
-        })),
-        hint: 'Space to select, Enter to confirm',
-      });
-
-      if (!response.selectedComponents || response.selectedComponents.length === 0) {
-        console.log(chalk.yellow('No components selected'));
-        return;
-      }
-
-      components = response.selectedComponents;
+    if (!config) {
+      spinner.fail('No Harukit configuration found. Run "npx harukit@latest init" first.')
+      process.exit(1)
     }
 
-    // Initialize component installer
-    const installer = new ComponentInstaller(cwd, configManager);
-    const packageManager = new PackageManager(cwd);
+    // Get components to add
+    let componentsToAdd = components
 
-    // Process each component
-    for (const componentName of components) {
-      console.log(chalk.blue(`\n📦 Adding ${componentName}...`));
-
-      try {
-        // Fetch component from registry
-        const component = await registryClient.getComponent(componentName);
-        
-        // Check if component already exists
-        const componentPath = path.resolve(cwd, config.aliases.components.replace('@', 'src'), `${componentName}.tsx`);
-        if (await fs.pathExists(componentPath) && !options.overwrite) {
-          const response = await prompts({
-            type: 'confirm',
-            name: 'overwrite',
-            message: `Component ${componentName} already exists. Overwrite?`,
-            initial: false,
-          });
-
-          if (!response.overwrite) {
-            console.log(chalk.yellow(`Skipping ${componentName}`));
-            continue;
-          }
-        }
-
-        // Install dependencies
-        if (component.dependencies.length > 0) {
-          console.log(chalk.blue(`Installing dependencies for ${componentName}...`));
-          await packageManager.install(component.dependencies, false);
-        }
-
-        if (component.devDependencies.length > 0) {
-          console.log(chalk.blue(`Installing dev dependencies for ${componentName}...`));
-          await packageManager.install(component.devDependencies, true);
-        }
-
-        // Install component files
-        await installer.installComponent(component, options.path);
-
-        // Update config
-        await configManager.addComponent(componentName);
-
-        console.log(chalk.green(`✅ ${componentName} added successfully!`));
-
-      } catch (error) {
-        console.error(chalk.red(`❌ Failed to add ${componentName}:`), error);
-        
-        const response = await prompts({
-          type: 'confirm',
-          name: 'continue',
-          message: 'Continue with remaining components?',
-          initial: true,
-        });
-
-        if (!response.continue) {
-          break;
-        }
-      }
+    if (componentsToAdd.length === 0) {
+      spinner.fail('Please specify components to add. Example: npx harukit@latest add button card')
+      process.exit(1)
     }
 
-    console.log(chalk.green('\n🎉 Components added successfully!'));
-    console.log(chalk.blue('\nNext steps:'));
-    console.log(chalk.gray('  • Import and use your components'));
-    console.log(chalk.gray('  • Run "harukit list" to see installed components'));
+    // Available components
+    const availableComponents = [
+      'accordion',
+      'button',
+      'card',
+      'input',
+      'label',
+      'tooltip',
+    ]
+
+    // Validate components
+    const invalidComponents = componentsToAdd.filter(
+      (c) => !availableComponents.includes(c)
+    )
+
+    if (invalidComponents.length > 0) {
+      spinner.fail(`Invalid components: ${invalidComponents.join(', ')}`)
+      console.log(chalk.blue('\nAvailable components:'))
+      availableComponents.forEach((c) => console.log(chalk.green(`  • ${c}`)))
+      process.exit(1)
+    }
+
+    // Get project structure
+    const hasSrcDir = await fs.pathExists(path.join(process.cwd(), 'src'))
+    const componentsDir = path.join(process.cwd(), hasSrcDir ? 'src' : '', 'components')
+    const libDir = path.join(process.cwd(), hasSrcDir ? 'src' : '', 'lib')
+
+    // Ensure directories exist
+    await fs.ensureDir(componentsDir)
+    await fs.ensureDir(libDir)
+
+    // Copy components
+    for (const component of componentsToAdd) {
+      const templatePath = path.join(__dirname, '../../templates/components', `${component}.tsx`)
+      const destPath = path.join(componentsDir, `${component}.tsx`)
+
+      if (await fs.pathExists(destPath) && !options.overwrite) {
+        console.log(chalk.yellow(`⚠️  ${component}.tsx already exists. Use --overwrite to replace.`))
+        continue
+      }
+
+      await fs.copy(templatePath, destPath)
+      console.log(chalk.green(`✅ Added ${component}.tsx`))
+    }
+
+    // Ensure utils file exists
+    const utilsTemplate = path.join(__dirname, '../../templates/lib/utils.ts')
+    const utilsDest = path.join(libDir, 'utils.ts')
+
+    if (!(await fs.pathExists(utilsDest))) {
+      await fs.copy(utilsTemplate, utilsDest)
+      console.log(chalk.green('✅ Added utils.ts'))
+    }
+
+    spinner.succeed('Components added successfully!')
+
+    console.log(chalk.blue('\nNext steps:'))
+    console.log(chalk.green('1. Import and use your components'))
+    console.log(chalk.green('2. Add more components with: npx harukit@latest add <component>'))
+    console.log(chalk.green('3. Check the documentation for usage examples'))
 
   } catch (error) {
-    console.error(chalk.red('❌ Failed to add components:'), error);
-    process.exit(1);
+    spinner.fail('Failed to add components')
+    console.error(error)
+    process.exit(1)
   }
 } 

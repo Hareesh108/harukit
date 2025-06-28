@@ -1,179 +1,297 @@
 # Harukit CLI
 
-A powerful CLI tool for managing Harukit UI components in your projects. Similar to shadcn/ui but with enhanced features and better customization.
+A modern CLI tool for adding beautiful, accessible UI components to your React projects. Harukit works like shadcn/ui - components are copied to your project, giving you full control over their code and styling.
+
+## Table of Contents
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Getting Started](#getting-started)
+- [Available Components](#available-components)
+- [CLI Commands](#cli-commands)
+- [Project Structure](#project-structure)
+- [Configuration](#configuration)
+- [Using Components](#using-components)
+- [Package Manager Support](#package-manager-support)
+- [Tailwind Configuration](#tailwind-configuration)
+- [TypeScript Support](#typescript-support)
+- [Next.js App Router](#nextjs-app-router)
+- [Migration from shadcn/ui](#migration-from-shadcnui)
+- [Troubleshooting](#troubleshooting)
+- [Support](#support)
 
 ## Features
 
-- 🚀 **Easy Initialization** - Set up Harukit in any React project
-- 📦 **Component Management** - Add, remove, and update components
-- 🎨 **Theme System** - Built-in theming with CSS custom properties
-- 🔧 **Project Detection** - Auto-detects React, Next.js, TypeScript, and Tailwind
-- 📋 **Interactive Prompts** - User-friendly command-line interface
-- 🔄 **Registry System** - Fetch components from remote registry
-- 💾 **Caching** - Smart caching for better performance
-- 🎯 **TypeScript Support** - Full TypeScript support with type safety
-
-## Installation
-
-```bash
-npm install -g @harukit/cli
-```
-
-Or using yarn:
-
-```bash
-yarn global add @harukit/cli
-```
-
-Or using pnpm:
-
-```bash
-pnpm add -g @harukit/cli
-```
+- 🚀 **Zero Runtime**: Components are copied to your project, no runtime dependencies
+- 🎨 **Fully Customizable**: Edit components directly in your codebase
+- ♿ **Accessible**: Built on top of Radix UI primitives
+- 🎯 **TypeScript**: Full TypeScript support out of the box
+- 🎨 **Tailwind CSS**: Styled with Tailwind CSS and CSS variables
+- 📦 **Multiple Package Managers**: Support for npm, yarn, and pnpm
 
 ## Quick Start
 
-### 1. Initialize Harukit in your project
+### 1. Initialize Harukit
 
 ```bash
-harukit init
+# Using npm
+npx harukit@latest init
+
+# Using pnpm
+pnpm dlx harukit@latest init
+
+# Using yarn
+yarn dlx harukit@latest init
 ```
 
 This will:
 
-- Detect your project type (React, Next.js, etc.)
-- Set up Tailwind CSS configuration
-- Create utility functions
-- Generate a `harukit.json` configuration file
+- Create a `harukit.json` configuration file
+- Set up the necessary directories (`components/`, `lib/`)
+- Create the `utils.ts` file with the `cn` function
+- Add global CSS with Tailwind variables
+- Show you the dependencies to install
 
-### 2. Add components
+### 2. Install Dependencies
+
+After initialization, you'll see a command to install dependencies. Run it based on your package manager:
+
+**npm:**
+
+```bash
+npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+```
+
+**pnpm:**
+
+```bash
+pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+```
+
+**yarn:**
+
+```bash
+yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+```
+
+### 3. Add Components
 
 ```bash
 # Add a single component
-harukit add button
+npx harukit@latest add button
 
 # Add multiple components
-harukit add button card input
+npx harukit@latest add button card input
 
-# Interactive selection
-harukit add
+# Add all available components
+npx harukit@latest add accordion button card input label tooltip
 ```
 
-### 3. List available components
+## Getting Started
+
+### Step 1: Create a new project (if you don't have one)
 
 ```bash
-# List all available components
-harukit list
-
-# List only installed components
-harukit list --installed
+# Create a new Next.js project
+npx create-next-app@latest my-app --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
+cd my-app
 ```
 
-## Commands
+### Step 2: Initialize Harukit
 
-### `harukit init`
+```bash
+# Choose your package manager
+npx harukit@latest init    # npm
+pnpm dlx harukit@latest init  # pnpm
+yarn dlx harukit@latest init  # yarn
+```
+
+### Step 3: Install dependencies
+
+Copy and run the command shown after initialization:
+
+```bash
+# npm
+npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# pnpm
+pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# yarn
+yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+```
+
+### Step 4: Add your first component
+
+```bash
+npx harukit@latest add button
+```
+
+### Step 5: Use the component
+
+```tsx
+import { Button } from "@/components/button"
+
+export default function Page() {
+  return (
+    <div className="p-8">
+      <Button>Hello Harukit!</Button>
+    </div>
+  )
+}
+```
+
+## Available Components
+
+| Component | Description | Category |
+|-----------|-------------|----------|
+| `accordion` | Collapsible content sections | Layout |
+| `button` | Versatile button with multiple variants | Form |
+| `card` | Container for content with header, content, and footer | Layout |
+| `input` | Form input field | Form |
+| `label` | Form label with accessibility features | Form |
+| `tooltip` | Hover tooltips | Feedback |
+
+## CLI Commands
+
+### `init`
 
 Initialize Harukit in your project.
 
 ```bash
-harukit init [options]
+npx harukit@latest init [options]
 ```
 
 **Options:**
 
-- `-y, --yes` - Skip confirmation prompts
+- `-y, --yes` - Skip prompts and use defaults
 - `--typescript` - Use TypeScript
-- `--tailwind` - Configure Tailwind CSS
+- `--tailwind` - Use Tailwind CSS
+- `--eslint` - Use ESLint
+- `--src-dir` - Use src directory
+- `--import-alias <alias>` - Import alias for components
 
-### `harukit add`
+**Examples:**
+
+```bash
+# Interactive setup
+npx harukit@latest init
+
+# Skip prompts with defaults
+npx harukit@latest init --yes
+
+# Custom configuration
+npx harukit@latest init --typescript --tailwind --src-dir
+```
+
+### `add`
 
 Add components to your project.
 
 ```bash
-harukit add [components...] [options]
+npx harukit@latest add <components...> [options]
 ```
 
 **Options:**
 
-- `-o, --overwrite` - Overwrite existing files
-- `--path <path>` - Custom path for components
+- `-y, --yes` - Skip prompts and use defaults
+- `--overwrite` - Overwrite existing components
 
 **Examples:**
 
 ```bash
-harukit add button
-harukit add button card input --overwrite
-harukit add --path src/ui
+# Add single component
+npx harukit@latest add button
+
+# Add multiple components
+npx harukit@latest add button card input
+
+# Overwrite existing components
+npx harukit@latest add button --overwrite
 ```
 
-### `harukit remove`
+### `remove`
 
 Remove components from your project.
 
 ```bash
-harukit remove [components...]
+npx harukit@latest remove <components...>
 ```
 
 **Examples:**
 
 ```bash
-harukit remove button
-harukit remove button card
+# Remove single component
+npx harukit@latest remove button
+
+# Remove multiple components
+npx harukit@latest remove button card
 ```
 
-### `harukit list`
+### `list`
 
-List available or installed components.
+List all available components.
 
 ```bash
-harukit list [options]
+npx harukit@latest list
 ```
 
-**Options:**
+### `update`
 
-- `--installed` - Show only installed components
-
-### `harukit update`
-
-Update components to their latest versions.
+Check for updates and show update instructions.
 
 ```bash
-harukit update [components...]
+npx harukit@latest update
 ```
 
-**Examples:**
+### `info`
+
+Show information about Harukit or specific components.
 
 ```bash
-harukit update button
-harukit update  # Update all installed components
-```
-
-### `harukit info`
-
-Show information about components or project.
-
-```bash
-harukit info [component]
+npx harukit@latest info [component]
 ```
 
 **Examples:**
 
 ```bash
-harukit info          # Show project information
-harukit info button   # Show button component information
+# Show general information
+npx harukit@latest info
+
+# Show specific component information
+npx harukit@latest info button
+```
+
+## Project Structure
+
+After initialization, your project will have this structure:
+
+```
+your-project/
+├── harukit.json          # Configuration file
+├── components/           # Your UI components
+│   ├── button.tsx
+│   ├── card.tsx
+│   └── ...
+├── lib/
+│   └── utils.ts         # Utility functions
+└── app/
+    └── globals.css      # Global styles with CSS variables
 ```
 
 ## Configuration
 
-The CLI creates a `harukit.json` file in your project root:
+The `harukit.json` file contains your project configuration:
 
 ```json
 {
+  "$schema": "https://harukit.com/schema.json",
   "style": "default",
-  "typescript": true,
+  "rsc": true,
+  "tsx": true,
   "tailwind": {
     "config": "tailwind.config.js",
-    "css": "src/index.css",
+    "css": "app/globals.css",
     "baseColor": "slate",
     "cssVariables": true,
     "prefix": ""
@@ -181,60 +299,260 @@ The CLI creates a `harukit.json` file in your project root:
   "aliases": {
     "components": "@/components",
     "utils": "@/lib/utils"
-  },
-  "registry": {
-    "url": "https://registry.harukit.dev",
-    "cache": true,
-    "ttl": 3600
-  },
-  "components": ["button", "card"],
-  "dependencies": ["clsx", "tailwind-merge"],
-  "devDependencies": ["tailwindcss", "autoprefixer"]
-}
-```
-
-## Project Structure
-
-After initialization, your project will have:
-
-```
-your-project/
-├── src/
-│   ├── components/     # Your components
-│   ├── lib/
-│   │   └── utils.ts    # Utility functions
-│   └── index.css       # Tailwind CSS
-├── tailwind.config.js  # Tailwind configuration
-├── harukit.json        # Harukit configuration
-└── package.json
-```
-
-## Registry
-
-The CLI fetches components from a remote registry. You can configure the registry URL in your `harukit.json`:
-
-```json
-{
-  "registry": {
-    "url": "https://your-registry.com",
-    "cache": true,
-    "ttl": 3600
   }
 }
 ```
 
-## Caching
+## Using Components
 
-The CLI caches registry responses for better performance. Cache is stored in `.harukit/cache/` and automatically expires based on the TTL setting.
+### Button Component
 
-## Contributing
+```tsx
+import { Button } from "@/components/button"
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests
-5. Submit a pull request
+export default function MyPage() {
+  return (
+    <div>
+      <Button>Default Button</Button>
+      <Button variant="destructive">Delete</Button>
+      <Button variant="outline">Outline</Button>
+      <Button size="sm">Small</Button>
+    </div>
+  )
+}
+```
+
+### Card Component
+
+```tsx
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card"
+
+export default function MyCard() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Card Title</CardTitle>
+        <CardDescription>Card description goes here</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p>Card content goes here</p>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+### Accordion Component
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/accordion"
+
+export default function MyAccordion() {
+  return (
+    <Accordion type="single" collapsible>
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Is it accessible?</AccordionTrigger>
+        <AccordionContent>
+          Yes. It adheres to the WAI-ARIA design pattern.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
+  )
+}
+```
+
+## Package Manager Support
+
+### npm
+
+```bash
+# Initialize
+npx harukit@latest init
+
+# Install dependencies
+npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# Add components
+npx harukit@latest add button card
+```
+
+### pnpm
+
+```bash
+# Initialize
+pnpm dlx harukit@latest init
+
+# Install dependencies
+pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# Add components
+pnpm dlx harukit@latest add button card
+```
+
+### yarn
+
+```bash
+# Initialize
+yarn dlx harukit@latest init
+
+# Install dependencies
+yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
+
+# Add components
+yarn dlx harukit@latest add button card
+```
+
+## Tailwind Configuration
+
+Make sure your `tailwind.config.js` includes the necessary paths:
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+}
+```
+
+## TypeScript Support
+
+All components are fully typed with TypeScript. Make sure your `tsconfig.json` includes the proper path mappings:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+## Next.js App Router
+
+For Next.js App Router, make sure to import the global CSS in your `app/layout.tsx`:
+
+```tsx
+import './globals.css'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+## Migration from shadcn/ui
+
+If you're migrating from shadcn/ui, the process is straightforward:
+
+1. Initialize Harukit: `npx harukit@latest init`
+2. Add the same components: `npx harukit@latest add button card input`
+3. Update your imports from `@/components/ui/button` to `@/components/button`
+
+The component APIs are compatible, so your existing code should work with minimal changes.
+
+## Troubleshooting
+
+### Common Issues
+
+**"Component not found"**
+
+- Make sure you're using the latest version: `npx harukit@latest`
+- Check available components: `npx harukit@latest list`
+
+**"Import error"**
+
+- Ensure the component was added successfully
+- Check that the import path matches your configuration
+
+**"Styling issues"**
+
+- Verify Tailwind CSS is properly configured
+- Check that CSS variables are defined in your global styles
+
+**"Package manager detection failed"**
+
+- Make sure you have a `package.json` file in your project root
+- Ensure you're using a supported package manager (npm, yarn, or pnpm)
+
+## Support
+
+- **Documentation**: [https://harukit.com](https://harukit.com)
+- **GitHub**: [https://github.com/your-username/harukit](https://github.com/your-username/harukit)
+- **Issues**: [https://github.com/your-username/harukit/issues](https://github.com/your-username/harukit/issues)
 
 ## License
 
-MIT License - see LICENSE file for details.
+MIT © [Your Name]

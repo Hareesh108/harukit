@@ -11,6 +11,7 @@
     "noEmit": true,
     "jsx": "preserve",
     "incremental": true,
+    "rootDir": ".",
     "plugins": [
       {
         "name": "next"
@@ -27,4 +28,4 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
-} 
+}
