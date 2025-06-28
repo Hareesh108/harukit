@@ -1,6 +1,6 @@
 {
     "name": "@harukit/www",
-    "version": "0.0.0",
+    "version": "0.0.1",
     "private": true,
     "scripts": {
         "dev": "next dev",
@@ -12,7 +12,6 @@
         "deploy": "vercel --prod"
     },
     "dependencies": {
-        "@harukit/ui": "workspace:*",
         "@next/mdx": "^14.0.4",
         "@radix-ui/react-accordion": "^1.1.2",
         "@radix-ui/react-alert-dialog": "^1.0.5",
@@ -44,6 +43,7 @@
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.0.0",
         "contentlayer": "^0.3.4",
+        "harukit": "^0.0.5",
         "lucide-react": "^0.294.0",
         "next": "^14.0.4",
         "next-themes": "^0.2.1",

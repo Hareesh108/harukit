@@ -13,10 +13,10 @@
     "declarationMap": true,
     "sourceMap": true,
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
     "moduleResolution": "node",
-    "types": ["node", "jest"]
+    "allowSyntheticDefaultImports": true,
+    "types": ["node"]
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist", "**/*.test.ts"]
-} 
+}

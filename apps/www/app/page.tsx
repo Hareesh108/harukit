@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@harukit/ui";
+import { Button } from "harukit";
 
 export default function HomePage() {
   return (
@@ -12,13 +12,22 @@ export default function HomePage() {
             </Link>
           </div>
           <nav className="flex items-center space-x-6 text-sm font-medium">
-            <Link href="/docs" className="transition-colors hover:text-foreground/80">
+            <Link
+              href="/docs"
+              className="transition-colors hover:text-foreground/80"
+            >
               Documentation
             </Link>
-            <Link href="/components" className="transition-colors hover:text-foreground/80">
+            <Link
+              href="/components"
+              className="transition-colors hover:text-foreground/80"
+            >
               Components
             </Link>
-            <Link href="https://github.com/your-username/harukit" className="transition-colors hover:text-foreground/80">
+            <Link
+              href="https://github.com/your-username/harukit"
+              className="transition-colors hover:text-foreground/80"
+            >
               GitHub
             </Link>
           </nav>
@@ -31,7 +40,8 @@ export default function HomePage() {
               Modern React UI Components
             </h1>
             <p className="max-w-[750px] text-lg text-muted-foreground sm:text-xl">
-              A modern, accessible, and customizable UI component library built with React, TypeScript, and Tailwind CSS.
+              A modern, accessible, and customizable UI component library built
+              with React, TypeScript, and Tailwind CSS.
             </p>
           </div>
           <div className="flex gap-4">
@@ -58,7 +68,8 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <h3 className="font-bold">TypeScript</h3>
                   <p className="text-sm text-muted-foreground">
-                    Built with TypeScript for better developer experience and type safety.
+                    Built with TypeScript for better developer experience and
+                    type safety.
                   </p>
                 </div>
               </div>
@@ -68,7 +79,8 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <h3 className="font-bold">Accessible</h3>
                   <p className="text-sm text-muted-foreground">
-                    All components are built with accessibility in mind, following WCAG guidelines.
+                    All components are built with accessibility in mind,
+                    following WCAG guidelines.
                   </p>
                 </div>
               </div>
@@ -78,7 +90,8 @@ export default function HomePage() {
                 <div className="space-y-2">
                   <h3 className="font-bold">Customizable</h3>
                   <p className="text-sm text-muted-foreground">
-                    Easy to customize with CSS custom properties and Tailwind CSS.
+                    Easy to customize with CSS custom properties and Tailwind
+                    CSS.
                   </p>
                 </div>
               </div>
@@ -115,4 +128,4 @@ export default function HomePage() {
       </footer>
     </div>
   );
-} 
+}

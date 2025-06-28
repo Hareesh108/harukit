@@ -2,9 +2,9 @@ import React from "react";
 import { cn } from "../utils/cs";
 
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   variant?: "default" | "filled" | "outlined" | "ghost";
-  size?: "sm" | "md" | "lg";
+  inputSize?: "sm" | "md" | "lg";
   leftIcon?: React.ReactNode;
   rightIcon?: React.ReactNode;
   error?: boolean;
@@ -21,7 +21,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       className,
       type,
       variant = "default",
-      size = "md",
+      inputSize = "md",
       leftIcon,
       rightIcon,
       error = false,
@@ -49,15 +49,15 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
 
     const sizes = {
       sm: "h-8 px-3 text-xs",
-      md: "h-10 px-3",
-      lg: "h-12 px-4 text-base",
+      md: "h-10 px-4 py-2",
+      lg: "h-11 px-8",
     };
 
     const stateClasses = error
       ? "border-destructive focus-visible:ring-destructive"
       : success
-      ? "border-green-500 focus-visible:ring-green-500"
-      : "";
+        ? "border-green-500 focus-visible:ring-green-500"
+        : "";
 
     const widthClass = fullWidth ? "w-full" : "";
     const iconPadding = leftIcon ? "pl-10" : "";
@@ -84,7 +84,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               baseStyles,
               variants[variant],
-              sizes[size],
+              sizes[inputSize],
               stateClasses,
               iconPadding,
               rightIconPadding,

@@ -29,7 +29,7 @@ importers:
 
   apps/demo:
     dependencies:
-      '@harukit/ui':
+      harukit:
         specifier: workspace:*
         version: link:../../packages/ui
       next:
@@ -75,9 +75,6 @@ importers:
 
   apps/www:
     dependencies:
-      '@harukit/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@next/mdx':
         specifier: ^14.0.4
         version: 14.2.30
@@ -171,6 +168,9 @@ importers:
       contentlayer:
         specifier: ^0.3.4
         version: 0.3.4(esbuild@0.25.5)
+      harukit:
+        specifier: workspace:^
+        version: link:../../packages/ui
       lucide-react:
         specifier: ^0.294.0
         version: 0.294.0(react@18.3.1)
@@ -223,6 +223,9 @@ importers:
 
   packages/cli:
     dependencies:
+      '@harukit/registry':
+        specifier: workspace:*
+        version: link:../registry
       chalk:
         specifier: ^5.3.0
         version: 5.4.1

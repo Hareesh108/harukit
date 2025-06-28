@@ -23,6 +23,7 @@ export default defineConfig({
     'semver',
     'cosmiconfig',
     'prettier',
-    'typescript'
+    'typescript',
+    '@harukit/registry'
   ],
 }); 
