@@ -4,6 +4,8 @@ import chalk from 'chalk'
 import ora from 'ora'
 import { ConfigManager } from '../config/manager'
 import { getTemplatePath } from '../utils/template-resolver'
+import { PackageManager } from '../utils/package-manager'
+import { RegistryClient } from '../registry/client'
 
 export async function add(components: string[], options: any) {
   const spinner = ora('Adding components...').start()
@@ -26,25 +28,28 @@ export async function add(components: string[], options: any) {
       process.exit(1)
     }
 
-    // Available components
-    const availableComponents = [
-      'accordion',
-      'button',
-      'card',
-      'input',
-      'label',
-      'tooltip',
-    ]
+    // Initialize registry client and package manager
+    const registryClient = new RegistryClient()
+    const packageManager = new PackageManager(process.cwd())
 
-    // Validate components
-    const invalidComponents = componentsToAdd.filter(
-      (c) => !availableComponents.includes(c)
-    )
+    // Get component metadata and validate components
+    const componentMetas: any[] = []
+    const invalidComponents: string[] = []
+
+    for (const componentName of componentsToAdd) {
+      const componentMeta = await registryClient.getComponent(componentName)
+      if (componentMeta) {
+        componentMetas.push(componentMeta)
+      } else {
+        invalidComponents.push(componentName)
+      }
+    }
 
     if (invalidComponents.length > 0) {
       spinner.fail(`Invalid components: ${invalidComponents.join(', ')}`)
       console.log(chalk.blue('\nAvailable components:'))
-      availableComponents.forEach((c) => console.log(chalk.green(`  • ${c}`)))
+      const allComponents = await registryClient.getAllComponents()
+      allComponents.forEach((c) => console.log(chalk.green(`  • ${c.name}`)))
       process.exit(1)
     }
 
@@ -57,18 +62,57 @@ export async function add(components: string[], options: any) {
     await fs.ensureDir(componentsDir)
     await fs.ensureDir(libDir)
 
+    // Collect all dependencies from components
+    const allDependencies = new Set<string>()
+    const allDevDependencies = new Set<string>()
+
+    for (const componentMeta of componentMetas) {
+      componentMeta.dependencies.forEach((dep: string) => allDependencies.add(dep))
+      componentMeta.devDependencies.forEach((dep: string) => allDevDependencies.add(dep))
+    }
+
+    // Install dependencies if any
+    if (allDependencies.size > 0 || allDevDependencies.size > 0) {
+      spinner.text = 'Installing dependencies...'
+      
+      try {
+        // Install regular dependencies
+        if (allDependencies.size > 0) {
+          const depsArray = Array.from(allDependencies)
+          console.log(chalk.cyan(`→ Installing dependencies: ${depsArray.join(', ')}`))
+          await packageManager.addMultiple(depsArray, false)
+        }
+
+        // Install dev dependencies
+        if (allDevDependencies.size > 0) {
+          const devDepsArray = Array.from(allDevDependencies)
+          console.log(chalk.cyan(`→ Installing dev dependencies: ${devDepsArray.join(', ')}`))
+          await packageManager.addMultiple(devDepsArray, true)
+        }
+      } catch (error) {
+        spinner.fail('Failed to install dependencies')
+        console.error(error)
+        process.exit(1)
+      }
+    }
+
     // Copy components
-    for (const component of componentsToAdd) {
-      const templatePath = getTemplatePath(`components/${component}.tsx`)
-      const destPath = path.join(componentsDir, `${component}.tsx`)
+    for (const componentMeta of componentMetas) {
+      const templatePath = getTemplatePath(`components/${componentMeta.name}.tsx`)
+      const destPath = path.join(componentsDir, `${componentMeta.name}.tsx`)
 
       if (await fs.pathExists(destPath) && !options.overwrite) {
-        console.log(chalk.yellow(`⚠️  ${component}.tsx already exists. Use --overwrite to replace.`))
+        console.log(chalk.yellow(`⚠️  ${componentMeta.name}.tsx already exists. Use --overwrite to replace.`))
         continue
       }
 
       await fs.copy(templatePath, destPath)
-      console.log(chalk.green(`✅ Added ${component}.tsx`))
+      console.log(chalk.green(`✅ Added ${componentMeta.name}.tsx`))
+      
+      // Show dependencies for this component
+      if (componentMeta.dependencies.length > 0) {
+        console.log(chalk.blue(`   Dependencies: ${componentMeta.dependencies.join(', ')}`))
+      }
     }
 
     // Ensure utils file exists

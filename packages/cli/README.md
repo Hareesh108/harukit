@@ -69,6 +69,8 @@ npx harukit@latest add button card input
 npx harukit@latest add accordion button card input label tooltip
 ```
 
+> **Note:** Component dependencies are automatically installed. For example, adding the `button` component will install `@radix-ui/react-slot` and `class-variance-authority`.
+
 ## Getting Started
 
 ### Step 1: Create a new project (if you don't have one)
@@ -181,6 +183,8 @@ npx harukit@latest add button card input
 # Overwrite existing components
 npx harukit@latest add button --overwrite
 ```
+
+> **Note:** Component dependencies are automatically installed using your detected package manager. For example, adding the `button` component will automatically install `@radix-ui/react-slot` and `class-variance-authority`.
 
 ### `remove`
 

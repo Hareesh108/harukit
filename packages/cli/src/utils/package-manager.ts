@@ -159,12 +159,16 @@ export class PackageManager {
   }
 
   async add(packageName: string, isDev = false): Promise<void> {
+    return this.addMultiple([packageName], isDev);
+  }
+
+  async addMultiple(packageNames: string[], isDev = false): Promise<void> {
     await this.init();
 
     return new Promise((resolve, reject) => {
-      const args = this.getAddArgs(packageName, isDev);
+      const args = this.getAddArgs(packageNames, isDev);
       
-      console.log(`Adding ${packageName} with ${this.manager}...`);
+      console.log(`Adding ${packageNames.join(', ')} with ${this.manager}...`);
       
       const child = spawn(this.manager, args, {
         cwd: this.root,
@@ -229,18 +233,18 @@ export class PackageManager {
     }
   }
 
-  private getAddArgs(packageName: string, isDev: boolean): string[] {
+  private getAddArgs(packageNames: string[], isDev: boolean): string[] {
     switch (this.manager) {
       case 'npm':
-        return ['install', packageName, ...(isDev ? ['--save-dev'] : [])];
+        return ['install', ...packageNames, ...(isDev ? ['--save-dev'] : [])];
       case 'yarn':
-        return ['add', packageName, ...(isDev ? ['--dev'] : [])];
+        return ['add', ...packageNames, ...(isDev ? ['--dev'] : [])];
       case 'pnpm':
-        return ['add', packageName, ...(isDev ? ['--save-dev'] : [])];
+        return ['add', ...packageNames, ...(isDev ? ['--save-dev'] : [])];
       case 'bun':
-        return ['add', packageName, ...(isDev ? ['--dev'] : [])];
+        return ['add', ...packageNames, ...(isDev ? ['--dev'] : [])];
       default:
-        return ['install', packageName, ...(isDev ? ['--save-dev'] : [])];
+        return ['install', ...packageNames, ...(isDev ? ['--save-dev'] : [])];
     }
   }
 

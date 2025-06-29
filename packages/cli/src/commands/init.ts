@@ -112,10 +112,8 @@ export async function init(options: any) {
     spinner.text = 'Installing dependencies...';
     const pm = new PackageManager(process.cwd());
     try {
-      for (const dep of dependencies) {
-        console.log(chalk.cyan(`→ Installing ${dep}...`));
-        await pm.add(dep, false);
-      }
+      console.log(chalk.cyan(`→ Installing dependencies: ${dependencies.join(', ')}`));
+      await pm.addMultiple(dependencies, false);
       spinner.succeed('All dependencies installed!');
     } catch (err) {
       spinner.fail('Failed to install dependencies.');
