@@ -335,57 +335,55 @@ export default function MyAccordion() {
 
 ## Package Manager Support
 
-### npm
+Harukit automatically detects your package manager and installs dependencies accordingly. The detection follows this priority:
+
+1. **CLI Package Manager**: Detects the package manager used to run the CLI (npx → npm, yarn dlx → yarn, etc.)
+2. **Project Lock Files**: Falls back to the package manager indicated by lock files in your project
+3. **System Preference**: Uses bun if available, otherwise defaults to npm
+
+### Supported Package Managers
+
+#### npm
 
 ```bash
-# Initialize
+# Initialize (automatically uses npm for dependencies)
 npx harukit@latest init
-
-# Install dependencies
-npm install clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
 
 # Add components
 npx harukit@latest add button card
 ```
 
-### pnpm
+#### pnpm
 
 ```bash
-# Initialize
+# Initialize (automatically uses pnpm for dependencies)
 pnpm dlx harukit@latest init
-
-# Install dependencies
-pnpm add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
 
 # Add components
 pnpm dlx harukit@latest add button card
 ```
 
-### yarn
+#### yarn
 
 ```bash
-# Initialize
+# Initialize (automatically uses yarn for dependencies)
 yarn dlx harukit@latest init
-
-# Install dependencies
-yarn add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
 
 # Add components
 yarn dlx harukit@latest add button card
 ```
 
-### bun
+#### bun
 
 ```bash
-# Initialize
+# Initialize (automatically uses bun for dependencies)
 bunx harukit@latest init
-
-# Install dependencies
-bun add clsx tailwind-merge class-variance-authority @radix-ui/react-slot @radix-ui/react-accordion @radix-ui/react-label @radix-ui/react-tooltip lucide-react
 
 # Add components
 bunx harukit@latest add button card
 ```
+
+> **Note**: Dependencies are automatically installed using your detected package manager. You don't need to manually install `clsx`, `tailwind-merge`, `class-variance-authority`, or any other dependencies - Harukit handles this for you!
 
 ## Tailwind Configuration
 
@@ -530,7 +528,14 @@ The component APIs are compatible, so your existing code should work with minima
 **"Package manager detection failed"**
 
 - Make sure you have a `package.json` file in your project root
-- Ensure you're using a supported package manager (npm, yarn, or pnpm)
+- Ensure you're using a supported package manager (npm, yarn, pnpm, or bun)
+- The CLI will automatically detect your package manager and install dependencies
+
+**"Dependencies not installed"**
+
+- Harukit automatically installs all required dependencies during initialization
+- If installation fails, try running the init command again
+- Check that your package manager is working correctly
 
 ## Support
 

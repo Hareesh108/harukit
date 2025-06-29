@@ -103,10 +103,6 @@ export async function init(options: any) {
       'clsx',
       'tailwind-merge',
       'class-variance-authority',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-label',
-      '@radix-ui/react-tooltip',
       'lucide-react',
     ];
     if (preferences.typescript) {

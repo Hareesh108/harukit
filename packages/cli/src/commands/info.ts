@@ -80,25 +80,25 @@ async function showComponentInfo(componentName: string, config: any): Promise<vo
 
     const component = await registryClient.getComponent(componentName);
     
-    console.log(chalk.green(`📦 ${component.name}`));
+    console.log(chalk.green(`📦 ${component?.name}`));
     console.log(chalk.gray('─'.repeat(50)));
-    console.log(`Description: ${component.description}`);
-    console.log(`Version: ${chalk.cyan(component.version)}`);
-    console.log(`Category: ${component.category}`);
-    console.log(`Author: ${component.author}`);
-    console.log(`License: ${component.license}`);
+    console.log(`Description: ${component?.description}`);
+    console.log(`Version: ${chalk.cyan(component?.version)}`);
+    console.log(`Category: ${component?.category}`);
+    console.log(`Author: ${component?.author}`);
+    console.log(`License: ${component?.license}`);
     
-    if (component.repository) {
-      console.log(`Repository: ${chalk.blue(component.repository)}`);
+    if (component?.repository) {
+      console.log(`Repository: ${chalk.blue(component?.repository)}`);
     }
     
-    if (component.documentation) {
-      console.log(`Documentation: ${chalk.blue(component.documentation)}`);
+    if (component?.documentation) {
+      console.log(`Documentation: ${chalk.blue(component?.documentation)}`);
     }
 
     console.log(`\n${chalk.yellow('Dependencies:')}`);
-    if (component.dependencies.length > 0) {
-      component.dependencies.forEach((dep: string) => {
+    if (component?.dependencies && component?.dependencies?.length > 0) {
+      component?.dependencies.forEach((dep: string) => {
         console.log(`  • ${dep}`);
       });
     } else {
@@ -106,8 +106,8 @@ async function showComponentInfo(componentName: string, config: any): Promise<vo
     }
 
     console.log(`\n${chalk.yellow('Dev Dependencies:')}`);
-    if (component.devDependencies.length > 0) {
-      component.devDependencies.forEach((dep: string) => {
+    if (component?.devDependencies && component?.devDependencies?.length > 0) {
+      component?.devDependencies.forEach((dep: string) => {
         console.log(`  • ${dep}`);
       });
     } else {
@@ -115,14 +115,14 @@ async function showComponentInfo(componentName: string, config: any): Promise<vo
     }
 
     console.log(`\n${chalk.yellow('Tags:')}`);
-    if (component.tags.length > 0) {
-      console.log(`  ${component.tags.join(', ')}`);
+    if (component?.tags && component?.tags?.length > 0) {
+      console.log(`  ${component?.tags.join(', ')}`);
     } else {
       console.log('  • None');
     }
 
     console.log(`\n${chalk.yellow('Files:')}`);
-    component.files.forEach((file: any) => {
+    component?.files.forEach((file: any) => {
       console.log(`  • ${file.name} (${file.type})`);
     });
 
