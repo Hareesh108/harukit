@@ -1,0 +1,84 @@
+# Harukit CLI
+
+A modern CLI tool for adding beautiful, accessible UI components to your React projects. Harukit works like shadcn/ui - components are copied to your project, giving you full control over their code and styling.
+
+## Features
+
+- 🚀 **Zero Runtime**: Components are copied to your project, no runtime dependencies
+- 🎨 **Fully Customizable**: Edit components directly in your codebase
+- ♿ **Accessible**: Built on top of Radix UI primitives
+- 🎯 **TypeScript**: Full TypeScript support out of the box
+- 🎨 **Tailwind CSS**: Styled with Tailwind CSS and CSS variables
+- 📦 **Multiple Package Managers**: Support for npm, yarn, pnpm, and bun (auto-detected)
+
+## Quick Start
+
+### 1. Initialize Harukit
+
+```bash
+# Using npm
+npx harukit@latest init
+
+# Using pnpm
+pnpm dlx harukit@latest init
+
+# Using yarn
+yarn dlx harukit@latest init
+
+# Using bun
+bunx harukit@latest init
+```
+
+This will:
+- Create a `harukit.json` configuration file
+- Set up the necessary directories (`components/`, `lib/`)
+- Create the `utils.ts` file with the `cn` function
+- Add global CSS with Tailwind variables
+- **Automatically install all required dependencies** using your detected package manager
+
+### 2. Add Components
+
+```bash
+# Add a single component
+npx harukit@latest add button
+
+# Add multiple components
+npx harukit@latest add button card input
+
+# Add all available components
+npx harukit@latest add accordion button card input label tooltip
+```
+
+### 3. Use Components
+
+```tsx
+import { Button } from "@/components/button"
+
+export default function Page() {
+  return (
+    <div className="p-8">
+      <Button>Hello Harukit!</Button>
+    </div>
+  )
+}
+```
+
+## Available Components
+
+| Component | Description | Category |
+|-----------|-------------|----------|
+| `accordion` | Collapsible content sections | Layout |
+| `button` | Versatile button with multiple variants | Form |
+| `card` | Container for content with header, content, and footer | Layout |
+| `input` | Form input field | Form |
+| `label` | Form label with accessibility features | Form |
+| `tooltip` | Hover tooltips | Feedback |
+
+## Get Started
+
+Choose your path to get started with Harukit:
+
+- **[Installation](/docs/installation)** - Learn how to install and set up Harukit
+- **[Components](/docs/components)** - Browse and learn about available components
+- **[CLI Commands](/docs/cli-commands)** - Reference for all CLI commands
+- **[Configuration](/docs/configuration)** - Configure Harukit for your project 

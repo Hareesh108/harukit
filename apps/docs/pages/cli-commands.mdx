@@ -1,0 +1,212 @@
+# CLI Commands
+
+Reference for all available Harukit CLI commands.
+
+## Overview
+
+Harukit CLI provides several commands to manage your UI components:
+
+- `init` - Initialize Harukit in your project
+- `add` - Add components to your project
+- `remove` - Remove components from your project
+- `list` - List available components
+- `update` - Check for updates
+- `info` - Show information about components
+
+## Global Options
+
+All commands support these global options:
+
+- `-s, --silent` - Suppress all output
+- `-v, --verbose` - Enable verbose logging
+- `--registry <url>` - Custom registry URL
+
+## init
+
+Initialize Harukit in your project.
+
+```bash
+npx harukit@latest init [options]
+```
+
+### Options
+
+- `-y, --yes` - Skip confirmation prompts
+- `--typescript` - Use TypeScript
+- `--tailwind` - Configure Tailwind CSS
+
+### Examples
+
+```bash
+# Interactive setup
+npx harukit@latest init
+
+# Skip prompts with defaults
+npx harukit@latest init --yes
+
+# Custom configuration
+npx harukit@latest init --typescript --tailwind
+```
+
+### What it does
+
+The `init` command will:
+
+1. Create a `harukit.json` configuration file
+2. Set up the necessary directories (`components/`, `lib/`)
+3. Create the `utils.ts` file with the `cn` function
+4. Add global CSS with Tailwind variables
+5. **Automatically install all required dependencies** using your detected package manager
+
+## add
+
+Add components to your project.
+
+```bash
+npx harukit@latest add <components...> [options]
+```
+
+### Arguments
+
+- `components...` - Components to add (space-separated)
+
+### Options
+
+- `-o, --overwrite` - Overwrite existing files
+- `--path <path>` - Custom path for components
+
+### Examples
+
+```bash
+# Add single component
+npx harukit@latest add button
+
+# Add multiple components
+npx harukit@latest add button card input
+
+# Overwrite existing components
+npx harukit@latest add button --overwrite
+
+# Add to custom path
+npx harukit@latest add button --path src/ui
+```
+
+### Available Components
+
+| Component | Description | Dependencies |
+|-----------|-------------|--------------|
+| `accordion` | Collapsible content sections | `@radix-ui/react-accordion` |
+| `button` | Versatile button with multiple variants | `@radix-ui/react-slot`, `class-variance-authority` |
+| `card` | Container for content with header, content, and footer | None |
+| `input` | Form input field | None |
+| `label` | Form label with accessibility features | `@radix-ui/react-label` |
+| `tooltip` | Hover tooltips | `@radix-ui/react-tooltip` |
+
+## remove
+
+Remove components from your project.
+
+```bash
+npx harukit@latest remove <components...>
+```
+
+### Arguments
+
+- `components...` - Components to remove (space-separated)
+
+### Examples
+
+```bash
+# Remove single component
+npx harukit@latest remove button
+
+# Remove multiple components
+npx harukit@latest remove button card
+```
+
+## list
+
+List all available components.
+
+```bash
+npx harukit@latest list [options]
+```
+
+### Options
+
+- `--installed` - Show only installed components
+
+### Examples
+
+```bash
+# List all available components
+npx harukit@latest list
+
+# List only installed components
+npx harukit@latest list --installed
+```
+
+## update
+
+Check for updates and show update instructions.
+
+```bash
+npx harukit@latest update [components...]
+```
+
+### Arguments
+
+- `components...` - Specific components to check for updates (optional)
+
+### Examples
+
+```bash
+# Check for all updates
+npx harukit@latest update
+
+# Check specific components
+npx harukit@latest update button card
+```
+
+## info
+
+Show information about Harukit or specific components.
+
+```bash
+npx harukit@latest info [component]
+```
+
+### Arguments
+
+- `component` - Component name (optional)
+
+### Examples
+
+```bash
+# Show general information
+npx harukit@latest info
+
+# Show specific component information
+npx harukit@latest info button
+```
+
+## Error Handling
+
+If a command fails, Harukit will:
+
+1. Display a clear error message
+2. Provide suggestions for fixing the issue
+3. Exit with a non-zero status code
+
+### Common Error Scenarios
+
+- **Component not found**: Make sure you're using the latest version
+- **Permission denied**: Check file permissions in your project
+- **Network error**: Verify your internet connection
+- **Package manager error**: Ensure your package manager is working correctly
+
+## Next Steps
+
+- **[Components](/docs/components)** - Learn about available components
+- **[Configuration](/docs/configuration)** - Configure Harukit for your project
+- **[Examples](/docs/examples)** - See examples of using components 

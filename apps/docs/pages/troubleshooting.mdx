@@ -1,0 +1,182 @@
+# Troubleshooting
+
+Common issues and their solutions when using Harukit CLI.
+
+## Common Issues
+
+### Component Not Found
+
+**Error:** `Component 'button' not found`
+
+**Solution:**
+1. Make sure you're using the latest version: `npx harukit@latest`
+2. Check available components: `npx harukit@latest list`
+3. Verify the component name is spelled correctly
+
+### Import Error
+
+**Error:** `Cannot resolve module '@/components/button'`
+
+**Solution:**
+1. Ensure the component was added successfully
+2. Check that the import path matches your configuration
+3. Verify your `tsconfig.json` has the correct path mappings:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+### Styling Issues
+
+**Problem:** Components don't look styled correctly
+
+**Solution:**
+1. Verify Tailwind CSS is properly configured
+2. Check that CSS variables are defined in your global styles
+3. Ensure your `tailwind.config.js` includes the necessary paths:
+
+```js
+module.exports = {
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
+  // ... rest of config
+}
+```
+
+### Package Manager Detection Failed
+
+**Error:** `Failed to detect package manager`
+
+**Solution:**
+1. Make sure you have a `package.json` file in your project root
+2. Ensure you're using a supported package manager (npm, yarn, pnpm, or bun)
+3. The CLI will automatically detect your package manager and install dependencies
+
+### Dependencies Not Installed
+
+**Problem:** Required dependencies are missing
+
+**Solution:**
+1. Harukit automatically installs all required dependencies during initialization
+2. If installation fails, try running the init command again
+3. Check that your package manager is working correctly
+4. Verify you have proper permissions to install packages
+
+### TypeScript Errors
+
+**Error:** TypeScript compilation errors
+
+**Solution:**
+1. Ensure TypeScript is properly configured
+2. Check that all required types are installed
+3. Verify your `tsconfig.json` includes the correct settings
+4. Make sure you're using compatible versions of React and TypeScript
+
+### Next.js App Router Issues
+
+**Problem:** Components don't work in Next.js App Router
+
+**Solution:**
+1. Make sure to import the global CSS in your `app/layout.tsx`:
+
+```tsx
+import './globals.css'
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  )
+}
+```
+
+2. Verify your project structure follows Next.js App Router conventions
+
+### Permission Denied
+
+**Error:** `Permission denied` when running commands
+
+**Solution:**
+1. Check file permissions in your project directory
+2. Ensure you have write access to the project folder
+3. Try running the command with appropriate permissions
+4. On Unix systems, you might need to use `sudo` (though this is not recommended)
+
+### Network Errors
+
+**Error:** Network-related errors during installation
+
+**Solution:**
+1. Verify your internet connection
+2. Check if your network allows npm/yarn/pnpm/bun registry access
+3. Try using a different network or VPN
+4. Clear your package manager cache:
+   - npm: `npm cache clean --force`
+   - yarn: `yarn cache clean`
+   - pnpm: `pnpm store prune`
+   - bun: `bun pm cache rm`
+
+## Getting Help
+
+If you're still experiencing issues:
+
+1. **Check the documentation** - Review the relevant sections in this guide
+2. **Search existing issues** - Look for similar problems in the GitHub repository
+3. **Create a new issue** - Provide detailed information about your problem:
+   - Operating system and version
+   - Node.js version
+   - Package manager and version
+   - Exact error message
+   - Steps to reproduce the issue
+
+## Debug Mode
+
+Enable verbose logging to get more detailed information:
+
+```bash
+npx harukit@latest --verbose init
+```
+
+This will show:
+- Package manager detection process
+- File operations being performed
+- Dependency installation details
+- Configuration changes
+
+## Environment Requirements
+
+Make sure your environment meets these requirements:
+
+- **Node.js**: 18.0.0 or higher
+- **npm**: 8.0.0 or higher (or equivalent for other package managers)
+- **Git**: For version control (optional but recommended)
+
+## Version Compatibility
+
+Harukit CLI version compatibility:
+
+| Harukit Version | Node.js | React | Next.js |
+|-----------------|---------|-------|---------|
+| 0.1.x | ≥18.0.0 | ≥18.0.0 | ≥13.0.0 |
+
+## Next Steps
+
+- **[Installation](/docs/installation)** - Review the installation process
+- **[CLI Commands](/docs/cli-commands)** - Check command usage
+- **[Configuration](/docs/configuration)** - Verify your configuration 

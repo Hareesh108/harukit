@@ -1,27 +1,29 @@
 {
-  "name": "harukit-test-app",
+  "name": "harukit-monorepo",
   "version": "0.1.0",
   "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "next": "14.0.4",
-    "react": "^18",
-    "react-dom": "^18"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "type-check": "turbo run type-check",
+    "clean": "turbo run clean",
+    "test": "turbo run test",
+    "publish": "turbo run publish",
+    "demo:dev": "cd packages/cli-demo && npm run dev",
+    "demo:build": "cd packages/cli-demo && npm run build",
+    "demo:test": "cd packages/cli-demo && npm run test",
+    "docs:dev": "cd apps/docs && npm run dev",
+    "docs:build": "cd apps/docs && npm run build",
+    "docs:start": "cd apps/docs && npm run start"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "autoprefixer": "^10.0.1",
-    "postcss": "^8",
-    "tailwindcss": "^3.3.0",
-    "eslint": "^8",
-    "eslint-config-next": "14.0.4"
-  }
+    "turbo": "^1.10.0",
+    "typescript": "^5.8.3",
+    "@types/node": "^20.10.5"
+  },
+  "packageManager": "pnpm@8.0.0"
 }

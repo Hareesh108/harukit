@@ -1,0 +1,371 @@
+# Examples
+
+See real-world examples of using Harukit components.
+
+## Basic Examples
+
+### Simple Form
+
+A basic form with input fields and buttons.
+
+```tsx
+import { Button } from "@/components/button"
+import { Input } from "@/components/input"
+import { Label } from "@/components/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card"
+
+export default function ContactForm() {
+  return (
+    <Card className="w-full max-w-md mx-auto">
+      <CardHeader>
+        <CardTitle>Contact Us</CardTitle>
+        <CardDescription>
+          Send us a message and we'll get back to you as soon as possible.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" placeholder="Enter your name" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input id="email" type="email" placeholder="Enter your email" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="message">Message</Label>
+          <Input id="message" placeholder="Enter your message" />
+        </div>
+        <Button className="w-full">Send Message</Button>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+### Navigation Bar
+
+A simple navigation bar with buttons and tooltips.
+
+```tsx
+import { Button } from "@/components/button"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
+
+export default function NavigationBar() {
+  return (
+    <nav className="flex items-center justify-between p-4 bg-background border-b">
+      <div className="flex items-center space-x-4">
+        <h1 className="text-xl font-bold">My App</h1>
+      </div>
+      
+      <div className="flex items-center space-x-2">
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm">
+                Home
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Go to home page</p>
+            </TooltipContent>
+          </Tooltip>
+          
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="sm">
+                Settings
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Open settings</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+        
+        <Button>Sign In</Button>
+      </div>
+    </nav>
+  )
+}
+```
+
+### FAQ Section
+
+An FAQ section using the accordion component.
+
+```tsx
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/accordion"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/card"
+
+export default function FAQSection() {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Frequently Asked Questions</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Accordion type="single" collapsible className="w-full">
+          <AccordionItem value="item-1">
+            <AccordionTrigger>What is Harukit?</AccordionTrigger>
+            <AccordionContent>
+              Harukit is a modern CLI tool for adding beautiful, accessible UI components to your React projects. 
+              It works like shadcn/ui - components are copied to your project, giving you full control over their code and styling.
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="item-2">
+            <AccordionTrigger>How do I install Harukit?</AccordionTrigger>
+            <AccordionContent>
+              You can install Harukit by running <code>npx harukit@latest init</code> in your project directory. 
+              This will set up the necessary configuration and install all required dependencies.
+            </AccordionContent>
+          </AccordionItem>
+          
+          <AccordionItem value="item-3">
+            <AccordionTrigger>Is Harukit free to use?</AccordionTrigger>
+            <AccordionContent>
+              Yes, Harukit is completely free and open source. You can use it in any project, 
+              commercial or personal, without any restrictions.
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </CardContent>
+    </Card>
+  )
+}
+```
+
+## Advanced Examples
+
+### Dashboard Layout
+
+A dashboard layout with cards and interactive elements.
+
+```tsx
+import { Button } from "@/components/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card"
+import { Input } from "@/components/input"
+import { Label } from "@/components/label"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/tooltip"
+
+export default function Dashboard() {
+  return (
+    <div className="min-h-screen bg-background p-6">
+      <div className="max-w-7xl mx-auto space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <p className="text-muted-foreground">Welcome back! Here's what's happening today.</p>
+          </div>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline">Settings</Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Configure your dashboard</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">12,345</div>
+              <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Revenue</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">$45,231</div>
+              <p className="text-xs text-muted-foreground">+10.5% from last month</p>
+            </CardContent>
+          </Card>
+          
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Projects</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">23</div>
+              <p className="text-xs text-muted-foreground">+5 new this week</p>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Quick Actions</CardTitle>
+            <CardDescription>Common tasks you can perform</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="search">Search</Label>
+                <Input id="search" placeholder="Search for anything..." />
+              </div>
+              <div className="flex items-end space-x-2">
+                <Button className="flex-1">Create Project</Button>
+                <Button variant="outline">Import</Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  )
+}
+```
+
+### Settings Form
+
+A comprehensive settings form with various input types.
+
+```tsx
+import { Button } from "@/components/button"
+import { Input } from "@/components/input"
+import { Label } from "@/components/label"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/card"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/accordion"
+
+export default function SettingsForm() {
+  return (
+    <div className="max-w-2xl mx-auto p-6 space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold">Settings</h1>
+        <p className="text-muted-foreground">Manage your account settings and preferences.</p>
+      </div>
+
+      <Accordion type="single" collapsible className="w-full">
+        <AccordionItem value="profile">
+          <AccordionTrigger>Profile Information</AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardContent className="pt-6 space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input id="firstName" placeholder="John" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input id="lastName" placeholder="Doe" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input id="email" type="email" placeholder="john@example.com" />
+                </div>
+                <Button>Save Changes</Button>
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="security">
+          <AccordionTrigger>Security</AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardContent className="pt-6 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="currentPassword">Current Password</Label>
+                  <Input id="currentPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="newPassword">New Password</Label>
+                  <Input id="newPassword" type="password" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input id="confirmPassword" type="password" />
+                </div>
+                <Button>Update Password</Button>
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
+
+        <AccordionItem value="notifications">
+          <AccordionTrigger>Notifications</AccordionTrigger>
+          <AccordionContent>
+            <Card>
+              <CardContent className="pt-6 space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="emailNotifications">Email Notifications</Label>
+                  <Input id="emailNotifications" placeholder="notifications@example.com" />
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="sm">Enable Push</Button>
+                  <Button variant="outline" size="sm">Enable SMS</Button>
+                </div>
+                <Button>Save Preferences</Button>
+              </CardContent>
+            </Card>
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
+  )
+}
+```
+
+## Component Combinations
+
+### Button Variants
+
+Showcase all button variants and sizes.
+
+```tsx
+import { Button } from "@/components/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/card"
+
+export default function ButtonShowcase() {
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle>Button Variants</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap gap-2">
+          <Button>Default</Button>
+          <Button variant="secondary">Secondary</Button>
+          <Button variant="destructive">Destructive</Button>
+          <Button variant="outline">Outline</Button>
+          <Button variant="ghost">Ghost</Button>
+          <Button variant="link">Link</Button>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Button Sizes</CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-wrap items-center gap-2">
+          <Button size="sm">Small</Button>
+          <Button size="default">Default</Button>
+          <Button size="lg">Large</Button>
+          <Button size="icon">🚀</Button>
+        </CardContent>
+      </Card>
+    </div>
+  )
+}
+```
+
+## Next Steps
+
+- **[Components](/docs/components)** - Learn more about individual components
+- **[CLI Commands](/docs/cli-commands)** - Add components to your project
+- **[Configuration](/docs/configuration)** - Customize your setup 

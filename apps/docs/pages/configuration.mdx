@@ -1,0 +1,252 @@
+# Configuration
+
+Learn how to configure Harukit for your project.
+
+## Overview
+
+Harukit uses a `harukit.json` configuration file to manage your project settings. This file is created automatically when you run `npx harukit@latest init`.
+
+## Configuration File
+
+The `harukit.json` file contains your project configuration:
+
+```json
+{
+  "$schema": "https://harukit.com/schema.json",
+  "style": "default",
+  "rsc": true,
+  "tsx": true,
+  "tailwind": {
+    "config": "tailwind.config.js",
+    "css": "app/globals.css",
+    "baseColor": "slate",
+    "cssVariables": true,
+    "prefix": ""
+  },
+  "aliases": {
+    "components": "@/components",
+    "utils": "@/lib/utils"
+  }
+}
+```
+
+## Configuration Options
+
+### Root Options
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `style` | `string` | `"default"` | The style variant to use |
+| `rsc` | `boolean` | `true` | Whether to use React Server Components |
+| `tsx` | `boolean` | `true` | Whether to use TypeScript |
+
+### Tailwind Configuration
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `config` | `string` | `"tailwind.config.js"` | Path to Tailwind config file |
+| `css` | `string` | `"app/globals.css"` | Path to global CSS file |
+| `baseColor` | `string` | `"slate"` | Base color for the design system |
+| `cssVariables` | `boolean` | `true` | Whether to use CSS variables |
+| `prefix` | `string` | `""` | CSS class prefix |
+
+### Aliases
+
+| Option | Type | Default | Description |
+|--------|------|---------|-------------|
+| `components` | `string` | `"@/components"` | Import alias for components |
+| `utils` | `string` | `"@/lib/utils"` | Import alias for utilities |
+
+## Tailwind Configuration
+
+Make sure your `tailwind.config.js` includes the necessary paths and configuration:
+
+```js
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  darkMode: ["class"],
+  content: [
+    './pages/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './app/**/*.{ts,tsx}',
+    './src/**/*.{ts,tsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
+      },
+      borderRadius: {
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: {
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+      },
+    },
+  },
+  plugins: [require("tailwindcss-animate")],
+}
+```
+
+## TypeScript Configuration
+
+For TypeScript projects, ensure your `tsconfig.json` includes proper path mappings:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  }
+}
+```
+
+## Global CSS
+
+Your global CSS file should include the CSS variables and base styles:
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96%;
+    --accent-foreground: 222.2 84% 4.9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 210 40% 98%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+```
+
+## Customizing Colors
+
+You can customize the color scheme by modifying the CSS variables in your global CSS file. The default theme uses a slate-based color palette, but you can change it to match your brand.
+
+### Example: Blue Theme
+
+```css
+:root {
+  --primary: 221.2 83.2% 53.3%;
+  --primary-foreground: 210 40% 98%;
+  /* ... other colors */
+}
+```
+
+## Project Structure
+
+After initialization, your project will have this structure:
+
+```
+your-project/
+├── harukit.json          # Configuration file
+├── components/           # Your UI components
+│   ├── button.tsx
+│   ├── card.tsx
+│   └── ...
+├── lib/
+│   └── utils.ts         # Utility functions
+└── app/
+    └── globals.css      # Global styles with CSS variables
+```
+
+## Next Steps
+
+- **[Components](/docs/components)** - Browse available components
+- **[CLI Commands](/docs/cli-commands)** - Learn about all available commands
+- **[Examples](/docs/examples)** - See configuration examples 

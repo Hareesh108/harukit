@@ -1,0 +1,140 @@
+# Installation
+
+Learn how to install and set up Harukit CLI in your project.
+
+## Prerequisites
+
+Before installing Harukit, make sure you have:
+
+- **Node.js** 18.0.0 or higher
+- A **React project** (Next.js, Vite, Create React App, etc.)
+- **Tailwind CSS** (recommended but not required)
+
+## Quick Installation
+
+### Step 1: Create a new project (if you don't have one)
+
+```bash
+# Create a new Next.js project
+npx create-next-app@latest my-app --typescript --tailwind --eslint --app --src-dir --import-alias "@/*" --yes
+cd my-app
+```
+
+### Step 2: Initialize Harukit
+
+Choose your package manager:
+
+```bash
+# Using npm
+npx harukit@latest init
+
+# Using pnpm
+pnpm dlx harukit@latest init
+
+# Using yarn
+yarn dlx harukit@latest init
+
+# Using bun
+bunx harukit@latest init
+```
+
+The `init` command will:
+
+- Create a `harukit.json` configuration file
+- Set up the necessary directories (`components/`, `lib/`)
+- Create the `utils.ts` file with the `cn` function
+- Add global CSS with Tailwind variables
+- **Automatically install all required dependencies** using your detected package manager
+
+### Step 3: Add your first component
+
+```bash
+npx harukit@latest add button
+```
+
+### Step 4: Use the component
+
+```tsx
+import { Button } from "@/components/button"
+
+export default function Page() {
+  return (
+    <div className="p-8">
+      <Button>Hello Harukit!</Button>
+    </div>
+  )
+}
+```
+
+## Package Manager Support
+
+Harukit automatically detects your package manager and installs dependencies accordingly. The detection follows this priority:
+
+1. **CLI Package Manager**: Detects the package manager used to run the CLI
+2. **Project Lock Files**: Falls back to the package manager indicated by lock files
+3. **System Preference**: Uses bun if available, otherwise defaults to npm
+
+### Supported Package Managers
+
+#### npm
+
+```bash
+# Initialize (automatically uses npm for dependencies)
+npx harukit@latest init
+
+# Add components
+npx harukit@latest add button card
+```
+
+#### pnpm
+
+```bash
+# Initialize (automatically uses pnpm for dependencies)
+pnpm dlx harukit@latest init
+
+# Add components
+pnpm dlx harukit@latest add button card
+```
+
+#### yarn
+
+```bash
+# Initialize (automatically uses yarn for dependencies)
+yarn dlx harukit@latest init
+
+# Add components
+yarn dlx harukit@latest add button card
+```
+
+#### bun
+
+```bash
+# Initialize (automatically uses bun for dependencies)
+bunx harukit@latest init
+
+# Add components
+bunx harukit@latest add button card
+```
+
+## Project Structure
+
+After initialization, your project will have this structure:
+
+```
+your-project/
+├── harukit.json          # Configuration file
+├── components/           # Your UI components
+│   ├── button.tsx
+│   ├── card.tsx
+│   └── ...
+├── lib/
+│   └── utils.ts         # Utility functions
+└── app/
+    └── globals.css      # Global styles with CSS variables
+```
+
+## Next Steps
+
+- **[Components](/docs/components)** - Browse available components
+- **[CLI Commands](/docs/cli-commands)** - Learn about all available commands
+- **[Configuration](/docs/configuration)** - Configure Harukit for your project 

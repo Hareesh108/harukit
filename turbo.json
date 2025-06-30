@@ -36,12 +36,26 @@
                 "^build"
             ]
         },
+        "test": {
+            "dependsOn": [
+                "^build"
+            ],
+            "outputs": [
+                "coverage/**"
+            ]
+        },
         "clean": {
             "cache": false
         },
         "deploy": {
             "dependsOn": [
                 "build"
+            ]
+        },
+        "publish": {
+            "dependsOn": [
+                "build",
+                "test"
             ]
         }
     }
